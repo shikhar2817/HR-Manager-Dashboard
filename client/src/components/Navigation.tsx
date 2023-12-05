@@ -15,18 +15,9 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 
-interface Props {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window?: () => Window;
-}
-
 const drawerWidth = 240;
 
-export default function Navigation(props: Props) {
-    const { window } = props;
+export default function Navigation() {
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
@@ -65,8 +56,6 @@ export default function Navigation(props: Props) {
         </Box>
     );
 
-    const container = window !== undefined ? () => window().document.body : undefined;
-
     return (
         <Box sx={{ display: "flex" }}>
             <CssBaseline />
@@ -99,7 +88,6 @@ export default function Navigation(props: Props) {
             </AppBar>
             <nav>
                 <Drawer
-                    container={container}
                     variant="temporary"
                     open={mobileOpen}
                     onClose={handleDrawerToggle}
