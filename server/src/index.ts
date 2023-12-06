@@ -5,6 +5,8 @@ import expressConfig from "./express.config";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import authRouter from "./routes/auth";
+import userRouter from "./routes/user";
+import { authenticateJWT } from "./middlewares/authenticate";
 
 const app = expressConfig();
 
@@ -34,4 +36,5 @@ app.get("/api/health", (_req: Request, res: Response) => {
     }
 });
 
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/users", authenticateJWT, userRouter);
