@@ -4,7 +4,8 @@ export type Employee = {
     jobTitle: string;
     email: string;
     phoneNumber: string;
+    onboardingDate: Date;
     officeLocation: string;
     department: string;
-    directManager: string | null;
+    directManager: string;
 };
