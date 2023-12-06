@@ -70,7 +70,7 @@ const columns: ColumnData[] = [
         dataKey: "id",
     },
     {
-        width: 120,
+        width: 200,
         label: "Name",
         dataKey: "name",
     },
@@ -80,7 +80,7 @@ const columns: ColumnData[] = [
         dataKey: "jobTitle",
     },
     {
-        width: 120,
+        width: 200,
         label: "Email",
         dataKey: "email",
     },
@@ -105,7 +105,7 @@ const columns: ColumnData[] = [
         dataKey: "department",
     },
     {
-        width: 120,
+        width: 200,
         label: "Direct Manager",
         dataKey: "directManager",
     },
