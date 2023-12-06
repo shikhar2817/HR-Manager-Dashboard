@@ -1,4 +1,5 @@
 import mongoose, { Document, Schema } from "mongoose";
+import bcrypt from "bcrypt";
 
 export interface Employee {
     id: string;
@@ -14,6 +15,8 @@ export interface Employee {
 
 export interface User extends Document {
     name: string;
+    email: string;
+    password: string;
     employees: Employee[];
 }
 
@@ -31,7 +34,17 @@ const employeeSchema = new Schema<Employee>({
 
 const userSchema = new Schema<User>({
     name: String,
+    email: { type: String, unique: true, required: true },
+    password: { type: String, required: true },
     employees: [employeeSchema],
+});
+
+userSchema.pre<User>("save", async function (next) {
+    if (this.isModified("password")) {
+        const saltRounds = 10;
+        this.password = await bcrypt.hash(this.password, saltRounds);
+    }
+    next();
 });
 
 export default mongoose.model<User>("User", userSchema);

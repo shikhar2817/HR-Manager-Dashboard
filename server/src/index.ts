@@ -4,6 +4,7 @@ import { MONGO_DB_URL, PORT } from "./env";
 import expressConfig from "./express.config";
 import bodyParser from "body-parser";
 import mongoose from "mongoose";
+import authRouter from "./routes/auth";
 
 const app = expressConfig();
 
@@ -32,3 +33,5 @@ app.get("/api/health", (_req: Request, res: Response) => {
         res.status(500).json({ message: "System is Sick 🔴" });
     }
 });
+
+app.use("/auth", authRouter);
