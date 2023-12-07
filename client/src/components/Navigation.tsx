@@ -33,9 +33,11 @@ export default function Navigation() {
 
     const drawer = (
         <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-            <Typography variant="h6" sx={{ my: 2 }}>
-                Juntrax Solutions
-            </Typography>
+            <Link to="/">
+                <Typography variant="h6" sx={{ my: 2, cursor: "pointer" }}>
+                    Juntrax Solutions
+                </Typography>
+            </Link>
             <Divider />
             <List>
                 <Link to="/">
@@ -77,21 +79,24 @@ export default function Navigation() {
                     >
                         <MenuIcon />
                     </IconButton>
+
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}>
                         Juntrax Solutions
                     </Typography>
+
                     <Box sx={{ display: { xs: "none", sm: "block" } }}>
                         {!localStorage.getItem("token") ? (
                             <>
-                                <Link to="/">
-                                    <Button sx={{ color: "#fff" }}>Home</Button>
-                                </Link>{" "}
-                                <Link to="/signup">
-                                    <Button sx={{ color: "#fff" }}>Sign Up</Button>
-                                </Link>
-                                <Link to="/login">
-                                    <Button sx={{ color: "#fff" }}>Login</Button>
-                                </Link>
+                                <Button href="/" sx={{ color: "#fff" }}>
+                                    Home
+                                </Button>
+                                <Button href="/signup" sx={{ color: "#fff" }}>
+                                    Sign Up
+                                </Button>
+
+                                <Button href="/login" sx={{ color: "#fff" }}>
+                                    Login
+                                </Button>
                             </>
                         ) : (
                             <Button sx={{ color: "#fff" }} onClick={handleLogout}>
