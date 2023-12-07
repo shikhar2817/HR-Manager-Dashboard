@@ -48,9 +48,30 @@ export const updateUserEmployeeDetails = async (employee: Employee) => {
         };
 
         const { userId } = jwtDecode(localStorage.getItem("token") as string) as JwtPayload;
-        const axiosRes: AxiosResponse = await axios.post(
+        const axiosRes: AxiosResponse = await axios.put(
             `${url}/api/users/${userId}/employees/${employee.id}`,
             employee,
+            config
+        );
+        const axiosData: UserResponse = axiosRes.data;
+
+        return axiosData.employees;
+    } catch (error) {
+        const axiosError = error as AxiosError;
+        const errorMessage: AuthResponse = axiosError.response?.data as AuthResponse;
+        return [];
+    }
+};
+
+export const deleteUserEmployeeDetails = async (employeeID: string) => {
+    try {
+        const config = {
+            headers: { Authorization: `Bearer ${token}` },
+        };
+
+        const { userId } = jwtDecode(localStorage.getItem("token") as string) as JwtPayload;
+        const axiosRes: AxiosResponse = await axios.delete(
+            `${url}/api/users/${userId}/employees/${employeeID}`,
             config
         );
         const axiosData: UserResponse = axiosRes.data;

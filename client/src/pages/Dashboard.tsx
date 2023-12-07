@@ -15,7 +15,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Employee } from "../types";
 import { allDepartments, allJobTitles, fakeData, indianStates } from "../constants";
 import { useNavigate } from "react-router-dom";
-import { createUserEmployeeDetails, getUserDetails, updateUserEmployeeDetails } from "../actions/user";
+import {
+    createUserEmployeeDetails,
+    deleteUserEmployeeDetails,
+    getUserDetails,
+    updateUserEmployeeDetails,
+} from "../actions/user";
 import { v4 as uuidv4 } from "uuid";
 
 const Dashboard = () => {
@@ -32,7 +37,6 @@ const Dashboard = () => {
             {
                 accessorKey: "id",
                 header: "Employ Id",
-                enableEditing: false,
                 size: 80,
             },
             {
@@ -307,12 +311,11 @@ function useCreateEmployee() {
                         ...prevEmployees,
                         {
                             ...newEmployeeInfo,
-                            id: uuidv4(),
                         },
                     ] as Employee[]
             );
         },
-        // onSettled: () => queryClient.invalidateQueries({ queryKey: ['employees'] }), //refetch employees after mutation, disabled for demo
+        onSettled: () => queryClient.invalidateQueries({ queryKey: ["employees"] }), //refetch employees after mutation,
     });
 }
 
@@ -354,8 +357,7 @@ function useDeleteEmployee() {
     return useMutation({
         mutationFn: async (employeeId: string) => {
             //send api update request here
-            await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-            return Promise.resolve();
+            return await deleteUserEmployeeDetails(employeeId);
         },
         //client side optimistic update
         onMutate: (employeeId: string) => {
@@ -363,7 +365,7 @@ function useDeleteEmployee() {
                 prevEmployees?.filter((employee: Employee) => employee.id !== employeeId)
             );
         },
-        // onSettled: () => queryClient.invalidateQueries({ queryKey: ['employees'] }), //refetch employees after mutation, disabled for demo
+        onSettled: () => queryClient.invalidateQueries({ queryKey: ["employees"] }), //refetch employees after mutation
     });
 }
 
