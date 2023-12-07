@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
     MRT_EditActionButtons,
     MaterialReactTable,
@@ -14,9 +14,18 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Employee } from "../types";
 import { allDepartments, allJobTitles, fakeData, indianStates } from "../constants";
+import { useNavigate } from "react-router-dom";
+import { createUserEmployeeDetails, getUserDetails, updateUserEmployeeDetails } from "../actions/user";
+import { v4 as uuidv4 } from "uuid";
 
 const Dashboard = () => {
+    const navigate = useNavigate();
     const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({});
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (!token) navigate("/");
+    }, []);
 
     const columns = useMemo<MRT_ColumnDef<Employee>[]>(
         () => [
@@ -50,8 +59,8 @@ const Dashboard = () => {
                 editSelectOptions: allJobTitles,
                 muiEditTextFieldProps: {
                     select: true,
-                    error: !!validationErrors?.state,
-                    helperText: validationErrors?.state,
+                    error: !!validationErrors?.jobTitle,
+                    helperText: validationErrors?.jobTitle,
                 },
             },
             {
@@ -76,13 +85,13 @@ const Dashboard = () => {
                 muiEditTextFieldProps: {
                     type: "text",
                     required: true,
-                    error: !!validationErrors?.email,
-                    helperText: validationErrors?.email,
+                    error: !!validationErrors?.phoneNumber,
+                    helperText: validationErrors?.phoneNumber,
                     //remove any previous validation errors when employee focuses on the input
                     onFocus: () =>
                         setValidationErrors({
                             ...validationErrors,
-                            email: undefined,
+                            phoneNumber: undefined,
                         }),
                 },
             },
@@ -90,15 +99,15 @@ const Dashboard = () => {
                 accessorKey: "onboardingDate",
                 header: "Onboarding Date",
                 muiEditTextFieldProps: {
-                    type: "text",
+                    type: "date",
                     required: true,
-                    error: !!validationErrors?.date,
-                    helperText: validationErrors?.date,
+                    error: !!validationErrors?.onboardingDate,
+                    helperText: validationErrors?.onboardingDate,
                     //remove any previous validation errors when employee focuses on the input
                     onFocus: () =>
                         setValidationErrors({
                             ...validationErrors,
-                            date: undefined,
+                            onboardingDate: undefined,
                         }),
                 },
             },
@@ -109,8 +118,8 @@ const Dashboard = () => {
                 editSelectOptions: indianStates,
                 muiEditTextFieldProps: {
                     select: true,
-                    error: !!validationErrors?.state,
-                    helperText: validationErrors?.state,
+                    error: !!validationErrors?.officeLocation,
+                    helperText: validationErrors?.officeLocation,
                 },
             },
             {
@@ -120,8 +129,8 @@ const Dashboard = () => {
                 editSelectOptions: allDepartments,
                 muiEditTextFieldProps: {
                     select: true,
-                    error: !!validationErrors?.state,
-                    helperText: validationErrors?.state,
+                    error: !!validationErrors?.department,
+                    helperText: validationErrors?.department,
                 },
             },
             {
@@ -130,13 +139,13 @@ const Dashboard = () => {
                 muiEditTextFieldProps: {
                     type: "text",
                     required: true,
-                    error: !!validationErrors?.name,
-                    helperText: validationErrors?.name,
+                    error: !!validationErrors?.directManager,
+                    helperText: validationErrors?.directManager,
                     //remove any previous validation errors when employee focuses on the input
                     onFocus: () =>
                         setValidationErrors({
                             ...validationErrors,
-                            name: undefined,
+                            directManager: undefined,
                         }),
                     //optionally add validation checking for onBlur or onChange
                 },
@@ -287,8 +296,7 @@ function useCreateEmployee() {
     return useMutation({
         mutationFn: async (employee: Employee) => {
             //send api update request here
-            await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-            return Promise.resolve();
+            return await createUserEmployeeDetails(employee);
         },
         //client side optimistic update
         onMutate: (newEmployeeInfo: Employee) => {
@@ -299,7 +307,7 @@ function useCreateEmployee() {
                         ...prevEmployees,
                         {
                             ...newEmployeeInfo,
-                            id: (Math.random() + 1).toString(36).substring(7),
+                            id: uuidv4(),
                         },
                     ] as Employee[]
             );
@@ -314,8 +322,7 @@ function useGetEmployees() {
         queryKey: ["employees"],
         queryFn: async () => {
             //send api request here
-            await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-            return Promise.resolve(fakeData);
+            return await getUserDetails();
         },
         refetchOnWindowFocus: false,
     });
@@ -327,8 +334,7 @@ function useUpdateEmployee() {
     return useMutation({
         mutationFn: async (employee: Employee) => {
             //send api update request here
-            await new Promise((resolve) => setTimeout(resolve, 1000)); //fake api call
-            return Promise.resolve();
+            return await updateUserEmployeeDetails(employee);
         },
         //client side optimistic update
         onMutate: (newEmployeeInfo: Employee) => {
@@ -338,7 +344,7 @@ function useUpdateEmployee() {
                 )
             );
         },
-        // onSettled: () => queryClient.invalidateQueries({ queryKey: ['employees'] }), //refetch employees after mutation, disabled for demo
+        onSettled: () => queryClient.invalidateQueries({ queryKey: ["employees"] }), //refetch employees after mutation
     });
 }
 
@@ -383,7 +389,7 @@ const validateEmail = (email: string) =>
 
 function validateEmployee(employee: Employee) {
     return {
-        firstName: !validateRequired(employee.name) ? "First Name is Required" : "",
+        name: !validateRequired(employee.name) ? "Name is Required" : "",
         email: !validateEmail(employee.email) ? "Incorrect Email Format" : "",
     };
 }

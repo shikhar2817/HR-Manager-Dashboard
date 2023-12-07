@@ -4,7 +4,6 @@ import { JWT_SECRET_KET } from "../env";
 
 export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
     const token = req.header("Authorization")?.replace("Bearer ", "");
-
     if (!token) {
         return res.status(401).json({ message: "Unauthorized" });
     }

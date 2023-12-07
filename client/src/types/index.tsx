@@ -15,6 +15,12 @@ export interface AuthResponse {
     success?: boolean;
 }
 
+export interface UserResponse {
+    name: string;
+    email: string;
+    employees: Employee[];
+}
+
 export interface SignUpForm {
     name: string;
     email: string;
@@ -24,4 +30,9 @@ export interface SignUpForm {
 export interface LoginUpForm {
     email: string;
     password: string;
+}
+
+export interface JwtPayload {
+    userId: string;
+    email: string;
 }
