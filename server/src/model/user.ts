@@ -7,7 +7,7 @@ export interface Employee {
     jobTitle: string;
     email: string;
     phoneNumber: string;
-    onboardingDate: Date;
+    onboardingDate: string;
     officeLocation: string;
     department: string;
     directManager: string;
@@ -26,7 +26,7 @@ const employeeSchema = new Schema<Employee>({
     jobTitle: String,
     email: String,
     phoneNumber: String,
-    onboardingDate: Date,
+    onboardingDate: String,
     officeLocation: String,
     department: String,
     directManager: String,
