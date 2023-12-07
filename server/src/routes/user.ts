@@ -1,6 +1,7 @@
 // src/routes/user.ts
 import express, { Request, Response } from "express";
 import User, { Employee } from "../model/user";
+import { sendEmail } from "../services/mailer";
 
 const router = express.Router();
 
@@ -38,6 +39,13 @@ router.post("/:userId/employees", async (req: Request, res: Response) => {
 
         // Save the updated user to the database
         await user.save();
+
+        // Send onboarding email to employee
+        await sendEmail(
+            newEmployeeData.email,
+            "Welcome to Organization",
+            generateOnboardingEmailBody(newEmployeeData.name)
+        );
 
         res.json(user);
     } catch (error: any) {
@@ -93,6 +101,13 @@ router.delete("/:userId/employees/:employeeId", async (req: Request, res: Respon
         if (employeeIndex === -1) {
             return res.status(404).json({ message: "Employee not found" });
         }
+
+        // Send offboarding email to employee
+        await sendEmail(
+            user.employees[employeeIndex].email,
+            "Thanks for your contribution",
+            generateOffboardingEmailBody(user.employees[employeeIndex].name)
+        );
 
         // Remove the employee from the user's employees array
         user.employees.splice(employeeIndex, 1);

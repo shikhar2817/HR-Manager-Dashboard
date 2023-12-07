@@ -1,5 +1,13 @@
-export const getUserIdFromAuthToken = (token: string): string => {
-    const payload = JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
-    console.log(payload);
-    return payload.user_id;
+const generateOnboardingEmailBody = (username: string) => {
+    return `<div>
+                <p> Hi ${username}, </p>
+                <p> You have been onboarded </p>
+            </div>`;
+};
+
+const generateOffboardingEmailBody = (username: string) => {
+    return `<div>
+                <p> Hi ${username}, </p>
+                <p> You have been OffBoarded. Thanks for you contribution. </p>
+            </div>`;
 };
