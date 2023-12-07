@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { AuthResponse, LoginUpForm, SignUpForm } from "../types";
 
 const url = process.env.REACT_APP_SERVER_URL;
@@ -14,8 +14,9 @@ export const signUpUser = async (formData: SignUpForm): Promise<AuthResponse> =>
             success: true,
         };
     } catch (error) {
-        const axiosError = error as AxiosError;
-        const errorMessage: AuthResponse = axiosError.response?.data as AuthResponse;
+        // const axiosError = error as AxiosError;
+        // const errorMessage: AuthResponse = axiosError.response?.data as AuthResponse;
+        console.error(error);
         return {
             token: "",
             success: false,
@@ -34,8 +35,9 @@ export const loginUser = async (formData: LoginUpForm): Promise<AuthResponse> =>
             success: true,
         };
     } catch (error) {
-        const axiosError = error as AxiosError;
-        const errorMessage: AuthResponse = axiosError.response?.data as AuthResponse;
+        // const axiosError = error as AxiosError;
+        // const errorMessage: AuthResponse = axiosError.response?.data as AuthResponse;
+        console.error(error);
         return {
             token: "",
             success: false,

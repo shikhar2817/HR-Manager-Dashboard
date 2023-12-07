@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import {
     MRT_EditActionButtons,
     MaterialReactTable,
@@ -25,7 +25,6 @@ import Table from "../components/Table";
 
 const Dashboard = () => {
     const navigate = useNavigate();
-    const [validationErrors, setValidationErrors] = useState<Record<string, string | undefined>>({});
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -45,15 +44,6 @@ const Dashboard = () => {
                 muiEditTextFieldProps: {
                     type: "email",
                     required: true,
-                    error: !!validationErrors?.name,
-                    helperText: validationErrors?.name,
-                    //remove any previous validation errors when employee focuses on the input
-                    onFocus: () =>
-                        setValidationErrors({
-                            ...validationErrors,
-                            name: undefined,
-                        }),
-                    //optionally add validation checking for onBlur or onChange
                 },
             },
             {
@@ -63,8 +53,6 @@ const Dashboard = () => {
                 editSelectOptions: allJobTitles,
                 muiEditTextFieldProps: {
                     select: true,
-                    error: !!validationErrors?.jobTitle,
-                    helperText: validationErrors?.jobTitle,
                 },
             },
             {
@@ -73,14 +61,6 @@ const Dashboard = () => {
                 muiEditTextFieldProps: {
                     type: "email",
                     required: true,
-                    error: !!validationErrors?.email,
-                    helperText: validationErrors?.email,
-                    //remove any previous validation errors when employee focuses on the input
-                    onFocus: () =>
-                        setValidationErrors({
-                            ...validationErrors,
-                            email: undefined,
-                        }),
                 },
             },
             {
@@ -89,14 +69,6 @@ const Dashboard = () => {
                 muiEditTextFieldProps: {
                     type: "text",
                     required: true,
-                    error: !!validationErrors?.phoneNumber,
-                    helperText: validationErrors?.phoneNumber,
-                    //remove any previous validation errors when employee focuses on the input
-                    onFocus: () =>
-                        setValidationErrors({
-                            ...validationErrors,
-                            phoneNumber: undefined,
-                        }),
                 },
             },
             {
@@ -105,14 +77,6 @@ const Dashboard = () => {
                 muiEditTextFieldProps: {
                     type: "date",
                     required: true,
-                    error: !!validationErrors?.onboardingDate,
-                    helperText: validationErrors?.onboardingDate,
-                    //remove any previous validation errors when employee focuses on the input
-                    onFocus: () =>
-                        setValidationErrors({
-                            ...validationErrors,
-                            onboardingDate: undefined,
-                        }),
                 },
             },
             {
@@ -122,8 +86,6 @@ const Dashboard = () => {
                 editSelectOptions: indianStates,
                 muiEditTextFieldProps: {
                     select: true,
-                    error: !!validationErrors?.officeLocation,
-                    helperText: validationErrors?.officeLocation,
                 },
             },
             {
@@ -133,8 +95,6 @@ const Dashboard = () => {
                 editSelectOptions: allDepartments,
                 muiEditTextFieldProps: {
                     select: true,
-                    error: !!validationErrors?.department,
-                    helperText: validationErrors?.department,
                 },
             },
             {
@@ -143,19 +103,10 @@ const Dashboard = () => {
                 muiEditTextFieldProps: {
                     type: "text",
                     required: true,
-                    error: !!validationErrors?.directManager,
-                    helperText: validationErrors?.directManager,
-                    //remove any previous validation errors when employee focuses on the input
-                    onFocus: () =>
-                        setValidationErrors({
-                            ...validationErrors,
-                            directManager: undefined,
-                        }),
-                    //optionally add validation checking for onBlur or onChange
                 },
             },
         ],
-        [validationErrors]
+        []
     );
 
     //call CREATE hook
@@ -174,24 +125,12 @@ const Dashboard = () => {
 
     //CREATE action
     const handleCreateEmployee: MRT_TableOptions<Employee>["onCreatingRowSave"] = async ({ values, table }) => {
-        const newValidationErrors = validateEmployee(values);
-        if (Object.values(newValidationErrors).some((error) => error)) {
-            setValidationErrors(newValidationErrors);
-            return;
-        }
-        setValidationErrors({});
         await createEmployee(values);
         table.setCreatingRow(null); //exit creating mode
     };
 
     //UPDATE action
     const handleSaveEmployee: MRT_TableOptions<Employee>["onEditingRowSave"] = async ({ values, table }) => {
-        const newValidationErrors = validateEmployee(values);
-        if (Object.values(newValidationErrors).some((error) => error)) {
-            setValidationErrors(newValidationErrors);
-            return;
-        }
-        setValidationErrors({});
         await updateEmployee(values);
         table.setEditingRow(null); //exit editing mode
     };
@@ -222,9 +161,7 @@ const Dashboard = () => {
                 minHeight: "500px",
             },
         },
-        onCreatingRowCancel: () => setValidationErrors({}),
         onCreatingRowSave: handleCreateEmployee,
-        onEditingRowCancel: () => setValidationErrors({}),
         onEditingRowSave: handleSaveEmployee,
         //optionally customize modal content
         renderCreateRowDialogContent: ({ table, row, internalEditComponents }) => (
@@ -381,19 +318,3 @@ const DashboardWithProviders = () => (
 );
 
 export default DashboardWithProviders;
-
-const validateRequired = (value: string) => !!value.length;
-const validateEmail = (email: string) =>
-    !!email.length &&
-    email
-        .toLowerCase()
-        .match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        );
-
-function validateEmployee(employee: Employee) {
-    return {
-        name: !validateRequired(employee.name) ? "Name is Required" : "",
-        email: !validateEmail(employee.email) ? "Incorrect Email Format" : "",
-    };
-}
