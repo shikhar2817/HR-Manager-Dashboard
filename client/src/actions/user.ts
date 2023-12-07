@@ -14,7 +14,7 @@ export const getUserDetails = async () => {
         const { userId } = jwtDecode(localStorage.getItem("token") as string) as JwtPayload;
         const axiosRes: AxiosResponse = await axios.get(`${url}/api/users/${userId}`, config);
         const axiosData: UserResponse = axiosRes.data;
-
+        localStorage.setItem("data", JSON.stringify(axiosData));
         return axiosData.employees;
     } catch (error) {
         const axiosError = error as AxiosError;
@@ -32,7 +32,6 @@ export const createUserEmployeeDetails = async (employee: Employee) => {
         const { userId } = jwtDecode(localStorage.getItem("token") as string) as JwtPayload;
         const axiosRes: AxiosResponse = await axios.post(`${url}/api/users/${userId}/employees`, employee, config);
         const axiosData: UserResponse = axiosRes.data;
-
         return axiosData.employees;
     } catch (error) {
         const axiosError = error as AxiosError;
@@ -54,7 +53,6 @@ export const updateUserEmployeeDetails = async (employee: Employee) => {
             config
         );
         const axiosData: UserResponse = axiosRes.data;
-
         return axiosData.employees;
     } catch (error) {
         const axiosError = error as AxiosError;
@@ -75,6 +73,7 @@ export const deleteUserEmployeeDetails = async (employeeID: string) => {
             config
         );
         const axiosData: UserResponse = axiosRes.data;
+        localStorage.setItem("data", JSON.stringify(axiosData));
 
         return axiosData.employees;
     } catch (error) {

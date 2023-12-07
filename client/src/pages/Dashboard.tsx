@@ -13,7 +13,7 @@ import { QueryClient, QueryClientProvider, useMutation, useQuery, useQueryClient
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Employee } from "../types";
-import { allDepartments, allJobTitles, fakeData, indianStates } from "../constants";
+import { allDepartments, allJobTitles, indianStates } from "../constants";
 import { useNavigate } from "react-router-dom";
 import {
     createUserEmployeeDetails,
@@ -21,7 +21,7 @@ import {
     getUserDetails,
     updateUserEmployeeDetails,
 } from "../actions/user";
-import { v4 as uuidv4 } from "uuid";
+import Table from "../components/Table";
 
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -197,9 +197,10 @@ const Dashboard = () => {
     };
 
     //DELETE action
-    const openDeleteConfirmModal = (row: MRT_Row<Employee>) => {
+    const openDeleteConfirmModal = async (row: MRT_Row<Employee>) => {
         if (window.confirm("Are you sure you want to delete this employee?")) {
-            deleteEmployee(row.original.id);
+            await deleteEmployee(row.original.id);
+            window.location.reload();
         }
     };
 
@@ -288,8 +289,8 @@ const Dashboard = () => {
     });
 
     return (
-        <Container sx={{ zIndex: 200000 }}>
-            <MaterialReactTable table={table} />;
+        <Container>
+            <MaterialReactTable table={table} />
         </Container>
     );
 };
@@ -375,6 +376,7 @@ const DashboardWithProviders = () => (
     //Put this with your other react-query providers near root of your app
     <QueryClientProvider client={queryClient}>
         <Dashboard />
+        <Table />
     </QueryClientProvider>
 );
 

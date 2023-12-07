@@ -1,7 +1,8 @@
 // src/routes/user.ts
 import express, { Request, Response } from "express";
-import User, { Employee } from "../model/user";
+import User, { Employee, OffBoardedEmployee } from "../model/user";
 import { sendEmail } from "../services/mailer";
+import { generateOffBoardedEmployeeDetails, generateOffboardingEmailBody, generateOnboardingEmailBody } from "../utils";
 
 const router = express.Router();
 
@@ -102,11 +103,16 @@ router.delete("/:userId/employees/:employeeId", async (req: Request, res: Respon
             return res.status(404).json({ message: "Employee not found" });
         }
 
+        let offBoardedEmployee: OffBoardedEmployee = generateOffBoardedEmployeeDetails(user.employees[employeeIndex]);
+
+        // Adding employee in offboarded list
+        user.offBoardedEmployees.push(offBoardedEmployee);
+
         // Send offboarding email to employee
         await sendEmail(
-            user.employees[employeeIndex].email,
+            offBoardedEmployee.email,
             "Thanks for your contribution",
-            generateOffboardingEmailBody(user.employees[employeeIndex].name)
+            generateOffboardingEmailBody(offBoardedEmployee.name)
         );
 
         // Remove the employee from the user's employees array

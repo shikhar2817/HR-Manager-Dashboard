@@ -10,6 +10,18 @@ export type Employee = {
     directManager: string;
 };
 
+export type OffBoardedEmployee = {
+    id: string;
+    name: string;
+    jobTitle: string;
+    email: string;
+    phoneNumber: string;
+    offboardingDate: string;
+    officeLocation: string;
+    department: string;
+    directManager: string;
+};
+
 export interface AuthResponse {
     token: string;
     success?: boolean;
@@ -19,6 +31,7 @@ export interface UserResponse {
     name: string;
     email: string;
     employees: Employee[];
+    offBoardedEmployees: OffBoardedEmployee[];
 }
 
 export interface SignUpForm {
