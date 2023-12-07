@@ -5,13 +5,14 @@ import SignUp from "./pages/SignUp";
 import Home from "./pages/Home";
 import NoPage from "./pages/Nopage";
 import Layout from "./pages/Layout";
-import GlobalContextProvider from "./context/GlobalContextProvider";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import DashboardWithProviders from "./pages/Dashboard";
+const queryClient = new QueryClient();
 
 function App() {
     return (
         <>
-            <GlobalContextProvider>
+            <QueryClientProvider client={queryClient}>
                 <BrowserRouter>
                     <Routes>
                         <Route path="/" element={<Layout />}>
@@ -23,7 +24,7 @@ function App() {
                         </Route>
                     </Routes>
                 </BrowserRouter>
-            </GlobalContextProvider>
+            </QueryClientProvider>
         </>
     );
 }

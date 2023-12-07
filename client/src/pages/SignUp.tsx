@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -9,18 +9,30 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { signUpUser } from "../actions/auth";
+import { SignUpForm } from "../types";
+import { useNavigate } from "react-router-dom";
 
 export default function SignUp() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const navigate = useNavigate();
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            firstName: data.get("firstName"),
-            lastName: data.get("lastName"),
-            email: data.get("email"),
-            password: data.get("password"),
-        });
+        const name = data.get("name") as string;
+        const email = data.get("email") as string;
+        const password = data.get("password") as string;
+        const signUpDataForm: SignUpForm = { name, email, password };
+
+        const res = await signUpUser(signUpDataForm);
+        if (res.success) {
+            navigate("/dashboard");
+        }
     };
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) navigate("/dashboard");
+    }, []);
 
     return (
         <Container component="main" maxWidth="xs">

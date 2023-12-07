@@ -14,14 +14,21 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
 export default function Navigation() {
+    const navigate = useNavigate();
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState);
+    };
+
+    const handleLogout = async () => {
+        localStorage.removeItem("token");
+        navigate("/");
     };
 
     const drawer = (
@@ -74,15 +81,23 @@ export default function Navigation() {
                         Juntrax Solutions
                     </Typography>
                     <Box sx={{ display: { xs: "none", sm: "block" } }}>
-                        <Link to="/">
-                            <Button sx={{ color: "#fff" }}>Home</Button>
-                        </Link>{" "}
-                        <Link to="/signup">
-                            <Button sx={{ color: "#fff" }}>Sign Up</Button>
-                        </Link>
-                        <Link to="/login">
-                            <Button sx={{ color: "#fff" }}>Login</Button>
-                        </Link>
+                        {!localStorage.getItem("token") ? (
+                            <>
+                                <Link to="/">
+                                    <Button sx={{ color: "#fff" }}>Home</Button>
+                                </Link>{" "}
+                                <Link to="/signup">
+                                    <Button sx={{ color: "#fff" }}>Sign Up</Button>
+                                </Link>
+                                <Link to="/login">
+                                    <Button sx={{ color: "#fff" }}>Login</Button>
+                                </Link>
+                            </>
+                        ) : (
+                            <Button sx={{ color: "#fff" }} onClick={handleLogout}>
+                                Logout
+                            </Button>
+                        )}
                     </Box>
                 </Toolbar>
             </AppBar>

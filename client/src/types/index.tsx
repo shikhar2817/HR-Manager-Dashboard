@@ -9,3 +9,19 @@ export type Employee = {
     department: string;
     directManager: string;
 };
+
+export interface AuthResponse {
+    token: string;
+    success?: boolean;
+}
+
+export interface SignUpForm {
+    name: string;
+    email: string;
+    password: string;
+}
+
+export interface LoginUpForm {
+    email: string;
+    password: string;
+}
