@@ -14,7 +14,7 @@ const Table = () => {
         if (!newData)
             setTimeout(() => {
                 window.location.reload();
-            }, 100);
+            }, 500);
         let jsonData = JSON.parse(newData) as UserResponse;
         if (jsonData.offBoardedEmployees.length > 0) setData(jsonData.offBoardedEmployees);
     }, []);
