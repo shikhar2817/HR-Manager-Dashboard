@@ -146,6 +146,7 @@ const Dashboard = () => {
     const table = useMaterialReactTable({
         columns,
         data: fetchedEmployees,
+        enableFullScreenToggle: false,
         createDisplayMode: "modal", //default ('row', and 'custom' are also available)
         editDisplayMode: "modal", //default ('row', 'cell', 'table', and 'custom' are also available)
         enableEditing: true,

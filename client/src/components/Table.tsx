@@ -67,10 +67,11 @@ const Table = () => {
     const table = useMaterialReactTable({
         columns,
         data,
+        enableFullScreenToggle: false,
     });
 
     return (
-        <Container sx={{ marginTop: 5 }}>
+        <Container sx={{ marginTop: 5, marginBottom: 5 }}>
             <h3>OffBoared Employees</h3>
             <MaterialReactTable table={table} />
         </Container>
