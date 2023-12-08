@@ -38,3 +38,23 @@ ZOHO_MAIL_NOREPLY_PASSWORD: <password for the email>
 ## Database
 
 -   `MongoDB`
+
+## Deployments
+
+-   Live URL : https://juntrax-assignment.vercel.app/
+-   Live Deployment: https://juntrax-assignment.vercel.app/
+-   Live Backend Deployment: https://juntrax-assignment.onrender.com
+-   Basic Walkthrough Video: https://www.loom.com/share/57ff923146994ff1a7eef70bb8296c33?sid=4fa44c48-a0b7-42a6-841e-46b794bc298e
+
+## List of Features:
+
+-   Login / Signup
+-   Add, Update, Remove Employees
+-   Onboarding and OffBoarding Emails
+-   Custom search filter (by individual fields as well as combined fields)
+
+### CICD for `main` branch
+
+-   Frontend is deployed in [Vercel](https://vercel.com/)
+-   Backend is deployed in [Render](https://render.com/)
+-   Database is deployed in [MongoDB Atlas](https://www.mongodb.com/atlas/database)
