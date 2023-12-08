@@ -28,6 +28,7 @@ export default function Navigation() {
 
     const handleLogout = async () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("data");
         navigate("/");
     };
 
