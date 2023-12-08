@@ -26,7 +26,6 @@ export default function SignUp() {
         const res = await signUpUser(signUpDataForm);
         if (res.success) {
             navigate("/dashboard");
-            window.location.reload();
         }
     };
 

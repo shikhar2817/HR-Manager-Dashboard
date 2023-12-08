@@ -25,7 +25,6 @@ export default function Login() {
         const res = await loginUser(loginDataForm);
         if (res.success) {
             navigate("/dashboard");
-            window.location.reload();
         }
     };
 

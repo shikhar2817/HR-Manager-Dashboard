@@ -11,8 +11,12 @@ const Table = () => {
     const [data, setData] = useState<OffBoardedEmployee[]>([]);
     useEffect(() => {
         let newData: string = localStorage.getItem("data") as string;
+        if (!newData)
+            setTimeout(() => {
+                window.location.reload();
+            }, 100);
         let jsonData = JSON.parse(newData) as UserResponse;
-        if (jsonData.offBoardedEmployees.length !== 0) setData(jsonData.offBoardedEmployees);
+        if (jsonData.offBoardedEmployees.length > 0) setData(jsonData.offBoardedEmployees);
     }, []);
     const columns = useMemo<MRT_ColumnDef<OffBoardedEmployee>[]>(
         () => [
