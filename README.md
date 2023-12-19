@@ -17,7 +17,7 @@
 
 -   Technology used: `Node`, `Typescript`, `Express`, `JWT` (for authentication).
 
-### How to setup Frontend locally
+### How to setup Backend locally
 
 -   Open terminal
 -   move to client directory (`cd server`)
