@@ -1,4 +1,4 @@
-# Juntrax Assignment
+# HR Manager Dashboard - Juntrax Assignment
 
 ## Overview
 This project involves building a single-page HR Manager Dashboard using React, TypeScript, Node.js, and MongoDB. The application allows HR managers to onboard, update, and view employee details. Key features include adding new employees (with fields such as name, job title, department, etc.), viewing and updating employee information, filtering/sorting employees, assigning office locations, and a search function. Additionally, login/logout functionality and employee offboarding are included, with an option for sending automated onboarding/offboarding emails.
